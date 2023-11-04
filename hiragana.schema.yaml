@@ -1,0 +1,89 @@
+# Rime schema
+# vim: set sw=2 sts=2 et:
+# encoding: utf-8
+
+schema:
+  schema_id: hiragana
+  name: 平仮名
+  version: "2014.05.19"
+  author:
+    - polyhedron <polyhedron@gmail.com>
+    - foodgen <chen.sst@gmail.com>
+  description: |
+    假名輸入，小寫假名用x前導
+
+switches:
+  - name: ascii_mode
+    reset: 0
+    states: [ 假名, 西文 ]
+  - name: half_shape
+    states: [ 半角, 全角 ]
+    reset: 0
+
+engine:
+  processors:
+    - ascii_composer
+    - recognizer
+    - key_binder
+    - speller
+    - punctuator
+    - selector
+    - navigator
+    - express_editor
+  segmentors:
+    - ascii_segmentor
+    - matcher
+    - abc_segmentor
+    - punct_segmentor
+    - fallback_segmentor
+  translators:
+    - punct_translator
+    - table_translator
+  filters:
+    - uniquifier
+
+menu:
+  page_size: 1
+
+speller:
+  auto_select: true
+  alphabet: 'abcdefghijklmnopqrstuvwxyz'
+  initials: 'abcdefghijklmnopqrstuvwxyz'
+
+translator:
+  dictionary: hiragana
+  enable_charset_filter: false
+  enable_completion: true
+  enable_encoder: true
+  enable_sentence: false
+  enable_user_dict: false
+  encode_commit_history: true
+  max_phrase_length: 4
+
+punctuator:
+  import_preset: default
+  full_shape: &symbols
+    '.': {commit: 。 }
+    ',': {commit: 、 }
+    '/': ・
+    '=': [ ゝ, ゞ ]
+    '+': [ ヽ, ヾ ]
+  half_shape: *symbols
+
+key_binder:
+  import_preset: default
+  bindings:
+    - { when: has_menu, accept: minus, send: minus }
+    - { when: has_menu, accept: equal, send: equal }
+    - { when: paging, accept: comma, send: comma }
+    - { when: has_menu, accept: period, send: period }
+    - { accept: Shift_L, select: katakana, when: always}
+    - { accept: Shift_R, select: katakana, when: always}
+    - { accept: Alt_R, select: tiger, when: always}
+
+recognizer:
+  import_preset: default
+
+ascii_composer:
+  switch_key:
+    Eisu_toggle: clear 
