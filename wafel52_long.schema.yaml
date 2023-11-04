@@ -1,0 +1,23 @@
+# Rime schema settings
+# encoding: utf-8
+
+schema:
+  schema_id: wafel52_long
+  name: wafel五二顶辅案
+  version: "1926.08.17"
+  author:
+    - Ace-Who
+  description: |
+    本辅助方案的作用是生成棱镜 wafel52_long.prism，供主方案调用。
+    本方案不直接用于打字。
+
+speller:
+  algebra:
+    - erase/^[a-z]{1,2}$/
+    - xform/^\*//
+
+translator:
+  dictionary: wafel52_long
+  enable_user_dict: false
+  enable_encoder: false
+  enable_commit_history: false 

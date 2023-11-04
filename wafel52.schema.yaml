@@ -1,0 +1,145 @@
+# Rime schema settings
+# encoding: utf-8
+
+schema:
+  schema_id: wafel52
+  name: wafel五二
+  version: "1926-08-17"
+  author:
+    - rime schema by Q
+  description: |
+    wafel五二顶版
+  dependencies:
+    - wafel52_long
+    - pinyin_simp
+    - hiragana
+    - katakana
+
+__patch:
+  - symbols:/patch?
+
+switches:
+#  - options: [ gb2312, gbk, utf8 ]
+#    states: [ gb2312, GBK, UTF-8 ]
+#    reset: 1
+  - name: ascii_mode
+    reset: 0
+    states: [ 中文, 西文 ]
+  - name: full_shape
+    states: [ 半角, 全角 ]
+  - name: ascii_punct
+    states: [ 。，, ．， ]
+
+engine:
+  processors:
+    - ascii_composer
+    - recognizer
+    - key_binder
+    - speller
+    - punctuator
+    - selector
+    - navigator
+    - express_editor
+  segmentors:
+    - ascii_segmentor
+    - matcher
+    - abc_segmentor
+    - affix_segmentor@long
+    - affix_segmentor@pinyin_lookup
+    - affix_segmentor@hiragana_lookup
+    - affix_segmentor@katakana_lookup
+    - punct_segmentor
+    - fallback_segmentor
+  translators:
+    - punct_translator
+    - history_translator@history
+    - table_translator
+    - script_translator@long
+    - script_translator@pinyin_lookup
+    - script_translator@hiragana_lookup
+    - script_translator@katakana_lookup
+  filters:
+    - charset_filter@gb2312
+    - charset_filter@gbk
+    - charset_filter@utf8
+    - uniquifier
+    - reverse_lookup_filter@pinyin_reverse_lookup
+
+
+speller:
+  alphabet: zyxwvutsrqponmlkjihgfedcba`;'
+  initials: zyxwvutsrqponmlkjihgfedcba`;'
+  #delimiter: " "
+  algebra:
+    - erase/^\*?[a-z]{3,}$/
+    - xform/_1/`/
+    - xform/_2/'/
+    - xform/_3/;/
+  auto_select: true
+
+translator:
+  dictionary: wafel52_short
+  prism: wafel52
+  enable_completion: false
+  enable_sentence: false
+  enable_user_dict: false
+  enable_encoder: false
+  encode_commit_history: false
+
+pinyin_lookup:
+  tag: pinyin_lookup
+  dictionary: pinyin_simp
+  prefix: ";"
+  tips: "〔拼〕"
+
+pinyin_reverse_lookup:
+  tags: [ pinyin_lookup ] 
+  overwrite_comment: true
+  dictionary: wafel52_long
+
+hiragana_lookup:
+  tag: hiragana_lookup
+  dictionary: hiragana
+  prefix: "`"
+  tips: "〔平〕"
+
+katakana_lookup:
+  tag: katakana_lookup
+  dictionary: katakana
+  prefix: "'"
+  tips: "〔片〕"
+
+long:
+  tag: long
+  dictionary: wafel52_long
+  enable_user_dict: false
+  enable_sentence: false
+
+punctuator:
+  import_preset: default
+
+key_bindings:
+  __append:
+    - {accept: "Control+space", select: japanese, when: always}
+    - {accept: Alt_L, send: grave, when: always}
+    - {accept: Alt_R, send: apostrophe, when: always}
+
+key_binder:
+  bindings:
+    __patch:
+      - key_bindings
+
+recognizer:
+  patterns:
+    pinyin_lookup: "^;[a-z]*'?$"
+    hiragana_lookup: "^`[a-z]*'?$"
+    katakana_lookup: "^'[a-z]*'?$"
+    long: "(?<![a-zA-Z`/])[a-z]{3,4}$"
+    uppercase: "^(?![`;]).*[A-Z][-_+.'0-9A-Za-z]*$"
+
+
+menu:
+  page_size: 9
+
+style:
+  horizontal: true
